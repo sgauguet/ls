@@ -1,38 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   list_repository.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgauguet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/15 14:20:04 by sgauguet          #+#    #+#             */
-/*   Updated: 2019/06/27 12:29:18 by sgauguet         ###   ########.fr       */
+/*   Created: 2019/06/27 12:23:34 by sgauguet          #+#    #+#             */
+/*   Updated: 2019/06/27 12:23:37 by sgauguet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS_H
+#include "ft_ls.h"
 
-# define FT_LS_H
+int	list_repository(const char * filename)
+{
+	void *dirp;
+	t_dirent *dp;
 
-# include "../libft/libft.h"
-# include <dirent.h>
-# include <pwd.h>
-# include <uuid/uuid.h>
-# include <errno.h>
-
-typedef struct dirent t_dirent;
-typedef struct stat t_stat;
-
-typedef struct s_options {
-	char op_l;
-	char op_R;
-	char op_a;
-	char op_r;
-	char op_t;
-	char op_u;
-	char op_f;
-	char op_g;
-	char op_d;
-}				t_options;
-
-#endif
+	if (!(dirp = opendir(filename)))
+		return 1;
+	while ((dp = readdir(dirp)) != NULL) {
+		ft_printf("%s\n", dp->d_name);
+	}
+	(void)closedir(dirp);
+	return 0;
+}
