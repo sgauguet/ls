@@ -55,7 +55,7 @@ int	ft_check_conversion_specifications(char c)
 	return (result);
 }
 
-int	ft_count_arg(const char *restrict format)
+int	ft_count_arg(const char *format)
 {
 	int i;
 	int count;

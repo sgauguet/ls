@@ -42,7 +42,7 @@ int		ft_print_p(va_list ap, char c, t_env *param)
 	if (!(str = ft_itoa_base_2((uintmax_t)result, 16, 'x')) || !c)
 		return (-1);
 	if (param->precision != -1)
-		str = ft_precision_int(str, param, (int)result);
+		str = ft_precision_int(str, param, (intptr_t)result);
 	param->flag_hashtag = 1;
 	str = ft_print_hashtag(str, param, 'x');
 	if (param->width != -1 && param->flag_less == 0 &&
@@ -64,7 +64,7 @@ int		ft_print_wint_t(va_list ap, char c, t_env *param)
 
 	result = va_arg(ap, intmax_t);
 	str = ft_wchar_t(result);
-	if (result < 0 || str == NULL)
+	if (str == NULL)
 		return (-1);
 	if (result == 0x00)
 		return (ft_print_backslash_zero(param));

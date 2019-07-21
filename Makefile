@@ -39,11 +39,17 @@ LIB_HEADERS_DIR =	./libft/includes
 #------------------------------------------------------------------------------#
 # Sources
 
-SRCS =			main.c
+SRCS =			main.c \
+				inspect_file.c \
+				opt_parse.c \
+				arg_parse.c \
+				print_list.c \
+				list_repository.c \
+				sort.c
 
 OBJS =			$(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-HEADERS =		$(HEADERS_DIR)/*.h 
+HEADERS =		$(HEADERS_DIR)/ft_ls.h 
 
 #------------------------------------------------------------------------------#
 # Compilation
@@ -78,6 +84,7 @@ all: $(NAME)
 .SILENT:
 
 $(NAME): $(OBJS)
+	make -C $(LIB_DIR) all
 	@$(CC) -g $(ALL_FLAGS) $^ -o $@ $(LIB_FLAGS)
 	@echo "$(GREEN)Executable created : $(RES)" $@
 
@@ -88,11 +95,13 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(HEADERS)
 	@$(CC) $(ALL_FLAGS) -o $@ -c $<
 
 clean:
+	make -C $(LIB_DIR) clean
 	@echo "$(RED)--- objects removed ---$(RES)";
 	@rm -rf $(OBJS_DIR)
 
 fclean: clean
 	@echo "$(RED)--- executable removed ---$(RES)";
+	@rm -rf $(LIB_DIR)/libft.a
 	@rm -rf $(NAME)
 
 re: fclean

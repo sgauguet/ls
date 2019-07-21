@@ -107,4 +107,7 @@ void				ft_div_mod(int a, int b, int *div, int *mod);
 void				ft_ultimate_div_mod(int *a, int *b);
 int					get_next_line(const int fd, char **line);
 
+int	ft_strcasecmp(const char *s1, const char *s2);
+char *ft_strtolower(const char *src, char *dest);
+
 #endif

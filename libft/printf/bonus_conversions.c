@@ -14,14 +14,12 @@
 
 void	ft_wildcard(va_list ap, t_env *param, int c, int flag)
 {
-	int	bin;
-
 	if (c == 1)
 	{
 		if (param->width == -1 || flag == 4)
 			param->width = va_arg(ap, intmax_t);
 		else
-			bin = va_arg(ap, intmax_t);
+			va_arg(ap, intmax_t);
 		if (param->width < 0)
 		{
 			param->width = -1 * param->width;

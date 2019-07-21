@@ -10,9 +10,35 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
+# Colors
 
-SRC = ft_memset.c \
+BLACK =		\033[1;30m
+RED =		\033[1;31m
+GREEN =		\033[1;32m
+YELLOW =	\033[1;33m
+BLUE =		\033[1;34m
+PINK =		\033[1;35m
+CYAN =		\033[1;36m
+GREY =		\033[1;37m
+RES =		\033[0m
+
+#------------------------------------------------------------------------------#
+# Folders
+
+SRCS_DIR =			.
+
+SRCS_PRINTF_DIR =	./printf
+
+OBJS_DIR =			./objs
+
+OBJS_PRINTF_DIR =	./objs/printf
+
+HEADERS_DIR =		.
+
+#------------------------------------------------------------------------------#
+# Sources
+
+SRCS = 	ft_memset.c \
 	  	ft_bzero.c \
 		ft_memcpy.c \
 		ft_memccpy.c \
@@ -80,51 +106,81 @@ SRC = ft_memset.c \
 		ft_isupper.c \
 		ft_div_mod.c \
 		get_next_line.c \
+		ft_strtolower.c \
+		ft_strcasecmp.c
 
-SRCS = printf/printf.c \
-		printf/check.c \
-		printf/types.c \
-		printf/search_flags.c \
-		printf/print_flags.c \
-		printf/field_width.c \
-		printf/conversions_1.c \
-		printf/conversions_2.c \
-		printf/conversions_3.c \
-		printf/conversions_4.c \
-		printf/bonus_conversions.c \
-		printf/wchar.c \
+SRCS_PRINTF = printf.c \
+		check.c \
+		types.c \
+		search_flags.c \
+		print_flags.c \
+		field_width.c \
+		conversions_1.c \
+		conversions_2.c \
+		conversions_3.c \
+		conversions_4.c \
+		bonus_conversions.c \
+		wchar.c
 
-OBJ = $(SRC:.c=.o)
+OBJS =			$(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-OBJS = printf.o \
-	   check.o \
-	   types.o \
-	   search_flags.o \
-	   print_flags.o \
-	   field_width.o \
-	   conversions_1.o \
-	   conversions_2.o \
-	   conversions_3.o \
-	   conversions_4.o \
-	   bonus_conversions.o \
-	   wchar.o \
+OBJS_PRINTF =	$(SRCS_PRINTF:%.c=$(OBJS_PRINTF_DIR)/%.o)
 
-FLAGS = -Wall -Wextra -Werror
+HEADERS =		$(HEADERS_DIR)/libft.h 
 
-HEADERS = libft.h \
-			
+#------------------------------------------------------------------------------#
+# Compilation
+
+NAME =			libft.a
+
+CC =			gcc
+
+FLAGS =			-Wall \
+				-Wextra \
+				-Werror \
+				#-fsanitize=address
+
+HEADERS_FLAGS =	-I $(HEADERS_DIR)
+
+ALL_FLAGS =		$(FLAGS) \
+				$(HEADERS_FLAGS)
+
+# Automatic Variables :
+# $@	Le nom de la cible
+# $^	La liste des dépendances
+# $<	Le nom de la première dépendance
+# $?	La liste des dépendances plus récentes que la cible
+# $*	Le nom du fichier sans suffixe
+#------------------------------------------------------------------------------#
+
 all: $(NAME)
 
-$(NAME):
-	gcc -c $(FLAGS) $(SRC) $(SRCS) -I $(HEADERS)
-	ar rc $(NAME) $(OBJ) $(OBJS)
+.SILENT:
+
+$(NAME): $(OBJS) $(OBJS_PRINTF)
+	@echo "$(GREEN)Library created : $(RES)" $@
+	ar rc $(NAME) $(OBJS) $(OBJS_PRINTF)
+
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(HEADERS)
+	@mkdir -p $(OBJS_PRINTF_DIR)
+	@echo "$(GREEN)Objects created : $(RES)" $@
+	@$(CC) $(ALL_FLAGS) -o $@ -c $<
+
+$(OBJS_PRINTF_DIR)/%.o: $(SRCS_PRINTF_DIR)/%.c $(HEADERS)
+	@echo "$(GREEN)Objects created : $(RES)" $@
+	@$(CC) $(ALL_FLAGS) -o $@ -c $<
 
 clean:
-	@rm -f $(OBJ) $(OBJS)
+	@echo "$(RED)--- objects removed ---$(RES)";
+	@rm -rf $(OBJS_DIR)
 
-fclean:
-	@rm -f $(NAME) $(OBJ) $(OBJS)
+fclean: clean
+	@echo "$(RED)--- executable removed ---$(RES)";
+	@rm -rf $(NAME)
 
-re: fclean all
+re: fclean
+	@$(MAKE) all
 
-.PHONY: clean fclean re
+.PHONY: all clean fclean re git
+
+
