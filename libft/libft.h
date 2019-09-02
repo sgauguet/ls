@@ -6,7 +6,7 @@
 /*   By: sgauguet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/02 22:55:14 by sgauguet          #+#    #+#             */
-/*   Updated: 2018/06/13 11:10:58 by sgauguet         ###   ########.fr       */
+/*   Updated: 2019/08/30 11:39:18 by sgauguet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,7 @@ void				ft_swap(int *a, int *b);
 void				ft_div_mod(int a, int b, int *div, int *mod);
 void				ft_ultimate_div_mod(int *a, int *b);
 int					get_next_line(const int fd, char **line);
-
-int	ft_strcasecmp(const char *s1, const char *s2);
-char *ft_strtolower(const char *src, char *dest);
+int					ft_strcasecmp(const char *s1, const char *s2);
+char				*ft_strtolower(const char *src, char *dest);
 
 #endif

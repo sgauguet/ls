@@ -6,42 +6,45 @@
 /*   By: sgauguet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/26 13:12:55 by sgauguet          #+#    #+#             */
-/*   Updated: 2019/06/26 13:16:51 by sgauguet         ###   ########.fr       */
+/*   Updated: 2019/08/30 12:04:24 by sgauguet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "ft_ls.h"
 
-int ft_pow(int n) 
+int		ft_pow(int n)
 {
-    int i;
-    int result;
+	int i;
+	int result;
 
-    i = 0;    
-    result = 1;
-    while (i < n) {
-        result *= 2;
-        i++;
-    }
-    return(result);
+	i = 0;
+	result = 1;
+	while (i < n)
+	{
+		result *= 2;
+		i++;
+	}
+	return (result);
 }
 
-int opt_valid(char opt) {
-	char *opt_valid;
-	int i;
+int		opt_valid(char opt)
+{
+	char	*opt_valid;
+	int		i;
 
 	opt_valid = "lRartufgd";
 	i = 0;
-	while (opt_valid[i] != '\0') {
+	while (opt_valid[i] != '\0')
+	{
 		if (opt_valid[i] == opt)
-			return i;
+			return (i);
 		i++;
 	}
-	return -1;
+	return (-1);
 }
 
-void opt_print(int options) {
+void	opt_print(int options)
+{
 	ft_printf("op_l %d\n", options & op_l);
 	ft_printf("op_R %d\n", options & op_R);
 	ft_printf("op_a %d\n", options & op_a);
@@ -53,22 +56,25 @@ void opt_print(int options) {
 	ft_printf("op_d %d\n", options & op_d);
 }
 
-int opt_parse(char *argv, int options) {
-	unsigned int i;
-	int op;
+int		opt_parse(char *argv, t_arg *args)
+{
+	unsigned int	i;
+	int				op;
 
 	i = 1;
 	op = 0;
 	if (ft_strlen(argv) < 2 || argv[0] != '-')
-		return 0;
-	while (i < ft_strlen(argv)) {
-		if ((op = opt_valid(argv[i])) == -1) {
+		return (0);
+	while (i < ft_strlen(argv))
+	{
+		if ((op = opt_valid(argv[i])) == -1)
+		{
 			ft_printf("Invalid option -- %c\n", argv[i]);
 			exit(1);
 		}
-		options |= ft_pow(op);
+		args->options |= ft_pow(op);
 		i++;
 	}
 	//opt_print(options);
-	return options;
+	return (args->options);
 }
