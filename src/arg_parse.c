@@ -73,7 +73,7 @@ t_file	*create_file(const char *filename)
 
 int		insert_file(t_arg *args, t_file *new)
 {
-	if ((new->stats.st_mode & S_IFMT) == S_IFDIR)
+	if (((new->stats.st_mode & S_IFMT) == S_IFDIR || (new->stats.st_mode & S_IFMT) == S_IFLNK) && !(args->options & op_d))
 	{
 		new->next = args->directories;
 		args->directories = new;
@@ -88,10 +88,13 @@ int		arg_parse(const char *filename, t_arg *args)
 {
 	t_file *new;
 
+	args->nb = args->nb + 1;
 	if (filename == NULL || ft_strlen(filename) == 0)
 		return (1);
-	if (!(new = create_file(filename)))
+	if (!(new = create_file(filename))) {
+		perror("ls");
 		return (1);
+	}
 	insert_file(args, new);
 	return (0);
 }

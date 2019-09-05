@@ -24,6 +24,7 @@
 typedef struct dirent	t_dirent;
 typedef struct stat		t_stat;
 typedef struct group	t_group;
+typedef struct passwd  	t_pwd;
 
 typedef enum		e_options {
 	op_l = 1, op_R = 2, op_a = 4, op_r = 8, op_t = 16, op_u = 32,
@@ -33,6 +34,7 @@ typedef enum		e_options {
 typedef struct		s_file {
 	char			filename[NAME_MAX];
 	char			filepath[PATH_MAX];
+	char			realpath[PATH_MAX];
 	unsigned char	type;
 	t_stat			stats;
 	struct s_file	*next;
@@ -42,6 +44,8 @@ typedef struct		s_arg {
 	t_file	*files;
 	t_file	*directories;
 	int		options;
+	int 	nb;
+	int 	print;
 }					t_arg;
 
 /*
@@ -68,7 +72,7 @@ int					list_repository(t_arg *args);
 
 int					extract_content(t_file *elem, t_file **list);
 int					delete_content(t_file **content, int all);
-int					add_content(const char *filename, const char *path,
+int					add_content(const char *filename, const char *realpath, const char *path,
 					t_file **content, unsigned char type);
 t_file				*get_repository_content(const char *filename);
 

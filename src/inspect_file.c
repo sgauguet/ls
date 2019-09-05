@@ -40,20 +40,19 @@ int		delete_content(t_file **content, int all)
 	list = NULL;
 	while (*content)
 	{
-		tmp = (*content)->next;
-		if (((*content)->stats.st_mode & S_IFMT) != S_IFDIR || all) {
-			ft_printf("deleted content %s\n", (*content)->filename);
-			free(*content);
+		tmp = *content;
+		 *content = (*content)->next;
+		if ((tmp->stats.st_mode & S_IFMT) != S_IFDIR || all) {
+			free(tmp);
 		}
 		else
-			extract_content(*content, &list);
-		*content = tmp;
+			extract_content(tmp, &list);
 	}
 	*content = list;
 	return (0);
 }
 
-int		add_content(const char *filename, const char *filepath,
+int		add_content(const char *filename, const char *realpath, const char *filepath,
 		t_file **content, unsigned char type)
 {
 	t_file *new;
@@ -63,6 +62,7 @@ int		add_content(const char *filename, const char *filepath,
 		return (1);
 	ft_strncpy(new->filename, filename, 255);
 	ft_strncpy(new->filepath, filepath, 4096);
+	ft_strncpy(new->realpath, realpath, 4096);
 	new->type = type;
 	new->next = NULL;
 	tmp = *content;
@@ -84,20 +84,17 @@ t_file	*get_repository_content(const char *filepath)
 	t_file		*content;
 	char		path[4096];
 
-
 	if (!(dirp = opendir(filepath)))
 		return (NULL);
 	content = NULL;
 	while ((dp = readdir(dirp)) != NULL)
 	{
-		//if (ft_strcmp(dp->d_name, ".") && ft_strcmp(dp->d_name, "..")) {
 		ft_bzero(path, 4096);
 		ft_strncpy(path, filepath, ft_strlen(filepath));
 		if (path[ft_strlen(path) - 1] != '/')
 			ft_strcat(path, "/");
 		ft_strcat(path, dp->d_name);
-		add_content(dp->d_name, path, &content, dp->d_type);
-		//}
+		add_content(dp->d_name, filepath, path, &content, dp->d_type);
 	}
 	(void)closedir(dirp);
 	return (content);

@@ -14,7 +14,7 @@
 
 int		is_flag(char *argv)
 {
-	if (ft_strlen(argv) > 2 && argv[0] == '-' && argv[1] == '-')
+	if (ft_strlen(argv) == 2 && argv[0] == '-' && argv[1] == '-')
 		return (1);
 	if (ft_strlen(argv) > 1 && argv[0] == '-')
 		return (2);
@@ -26,6 +26,8 @@ void	init_args(t_arg *args)
 	args->files = NULL;
 	args->directories = NULL;
 	args->options = 0;
+	args->print = 0;
+	args->nb = -1;
 }
 
 int		main(int argc, char **argv)
@@ -33,7 +35,6 @@ int		main(int argc, char **argv)
 	t_arg args;
 
 	init_args(&args);
-	ft_printf("%d\n ", sizeof(t_stat));
 	while (argc--)
 	{
 		argv++;
@@ -42,7 +43,7 @@ int		main(int argc, char **argv)
 		else
 			arg_parse(*argv, &args);
 	}
-	if (args.files == NULL && args.directories == NULL)
+	if (args.nb == 0)
 		arg_parse(".", &args);
 	list_repository(&args);
 	arg_delete(&args);

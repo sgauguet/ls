@@ -56,7 +56,7 @@ HEADERS =		$(HEADERS_DIR)/ft_ls.h
 
 NAME =			ft_ls
 
-CC =			gcc
+CC =			gcc -g
 
 FLAGS =			-Wall \
 				-Wextra \

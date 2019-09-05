@@ -63,6 +63,8 @@ int		opt_parse(char *argv, t_arg *args)
 
 	i = 1;
 	op = 0;
+	if (ft_strlen(argv) == 2 && argv[0] == '-' && argv[1] == '-')
+		return (0);
 	if (ft_strlen(argv) < 2 || argv[0] != '-')
 		return (0);
 	while (i < ft_strlen(argv))
