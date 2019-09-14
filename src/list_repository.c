@@ -86,6 +86,11 @@ int	list_repository(t_arg *args)
 		while (!alphabetical_order(&(args->files)))
 			;
 	}
+	if (args->directories && args->directories->next)
+	{
+		while (!alphabetical_order(&(args->directories)))
+			;
+	}
 	tmp = args->files;
 	sort_list(args, &tmp);
 	while (tmp)
@@ -97,19 +102,24 @@ int	list_repository(t_arg *args)
 		tmp = tmp->next;
 	}
 	tmp = args->directories;
+	sort_list(args, &tmp);
 	if (args->files && args->directories && !(args->options & op_d))
 		ft_printf("\n");
 	while (tmp)
 	{
 		content = get_repository_content(tmp->filename);
-		sort_list(args, &content);
-		print_content(args, &content);
-		if (args->options & op_R)
-		{
-			delete_content(&content, 0);
-			recursive(args, &content);
+		if (content) {
+			sort_list(args, &content);
+			print_content(args, &content);
+			if (args->options & op_R)
+			{
+				delete_content(&content, 0);
+				recursive(args, &content);
+			}
+			delete_content(&content, 1);
 		}
-		delete_content(&content, 1);
+		else
+			ft_printf("ls: %s: %s\n", tmp->filename, strerror(errno));
 		tmp = tmp->next;
 	}
 	return (0);

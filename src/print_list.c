@@ -84,9 +84,7 @@ int	print_content(t_arg *args, t_file **content)
 		return (1);
 	if (args->print == 1)
 		ft_printf("\n");
-	if (*content && ((args->options & op_R)
-		|| (args->files && args->directories)
-		|| (args->directories && args->directories->next)))
+	if (*content && (((args->options & op_R) && args->print) || (args->files && args->directories) || (args->directories && args->directories->next) || (args->options & op_r)))
 		ft_printf("%s:\n", (*content)->realpath);
 	while (*content)
 	{

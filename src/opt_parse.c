@@ -71,7 +71,8 @@ int		opt_parse(char *argv, t_arg *args)
 	{
 		if ((op = opt_valid(argv[i])) == -1)
 		{
-			ft_printf("Invalid option -- %c\n", argv[i]);
+			ft_printf("ls: illegal option -- %c\n", argv[i]);
+			ft_printf("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]\n");
 			exit(1);
 		}
 		args->options |= ft_pow(op);

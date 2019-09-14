@@ -60,9 +60,10 @@ int		add_content(const char *filename, const char *realpath, const char *filepat
 
 	if (!(new = create_file(filepath)))
 		return (1);
-	ft_strncpy(new->filename, filename, 255);
-	ft_strncpy(new->filepath, filepath, 4096);
-	ft_strncpy(new->realpath, realpath, 4096);
+	ft_bzero(new->filename, NAME_MAX);
+	ft_strncpy(new->filename, filename, ft_strlen(filename));
+	ft_strncpy(new->filepath, filepath, ft_strlen(filepath));
+	ft_strncpy(new->realpath, realpath, ft_strlen(realpath));
 	new->type = type;
 	new->next = NULL;
 	tmp = *content;
@@ -97,5 +98,7 @@ t_file	*get_repository_content(const char *filepath)
 		add_content(dp->d_name, filepath, path, &content, dp->d_type);
 	}
 	(void)closedir(dirp);
+	while (!alphabetical_order(&content))
+		;
 	return (content);
 }

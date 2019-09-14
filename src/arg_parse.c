@@ -59,10 +59,13 @@ t_file	*create_file(const char *filename)
 	t_file *new;
 
 	new = NULL;
-	if (!(new = (t_file *)malloc(sizeof(t_file) * 1))) {
+	if (!(new = (t_file *)malloc(sizeof(t_file)))) {
 		return (NULL);
 	}
-	ft_strncpy(new->filename, filename, 4096);
+	ft_bzero(new->filename, NAME_MAX);
+	ft_bzero(new->filepath, PATH_MAX);
+	ft_bzero(new->realpath, PATH_MAX);
+	ft_strncpy(new->filename, filename, ft_strlen(filename));
 	if (lstat(filename, &new->stats) != 0)
 	{
 		free(new);
@@ -92,7 +95,7 @@ int		arg_parse(const char *filename, t_arg *args)
 	if (filename == NULL || ft_strlen(filename) == 0)
 		return (1);
 	if (!(new = create_file(filename))) {
-		perror("ls");
+		ft_printf("ls: %s: %s\n", filename, strerror(errno));
 		return (1);
 	}
 	insert_file(args, new);
