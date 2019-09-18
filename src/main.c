@@ -26,8 +26,9 @@ void	init_args(t_arg *args)
 	args->files = NULL;
 	args->directories = NULL;
 	args->options = 0;
+	args->count_arg = -1;
+	args->count_dir = 0;
 	args->print = 0;
-	args->nb = -1;
 }
 
 int		main(int argc, char **argv)
@@ -43,9 +44,10 @@ int		main(int argc, char **argv)
 		else
 			arg_parse(*argv, &args);
 	}
-	if (args.nb == 0)
+	if (args.count_arg == 0)
 		arg_parse(".", &args);
-	list_repository(&args);
+	list_files(&args);
+	list_directories(&args);
 	arg_delete(&args);
 	return (1);
 }

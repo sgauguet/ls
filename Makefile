@@ -45,7 +45,8 @@ SRCS =			main.c \
 				arg_parse.c \
 				print_list.c \
 				list_repository.c \
-				sort.c
+				sort.c \
+				utils.c
 
 OBJS =			$(SRCS:%.c=$(OBJS_DIR)/%.o)
 

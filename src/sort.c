@@ -116,14 +116,11 @@ t_file	*alphabetical_order(t_file **list)
 
 int		sort_list(t_arg *args, t_file **list)
 {
-	//print_files(args);
 	if (args->options & op_t)
 		modification_time_order(list);
-	if (args->options & op_u) {
+	if (args->options & op_u)
 		access_time_order(list);
-	}
-	if (args->options & op_r) {
+	if (args->options & op_r)
 		reverse_order(list);
-	}
 	return (0);
 }

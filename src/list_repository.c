@@ -12,19 +12,6 @@
 
 #include "ft_ls.h"
 
-int	count_directories(t_file **list)
-{
-	t_file *tmp;
-
-	tmp = *list;
-	while (tmp) {
-		if ((tmp->stats.st_mode & S_IFMT) == S_IFDIR)
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
 int	remove_first_elem_list(t_file **list)
 {
 	t_file *tmp;
@@ -58,7 +45,8 @@ int	recursive(t_arg *args, t_file **list)
 	if (*list)
 	{
 		if (ft_strcmp((*list)->filename, ".")
-				&& ft_strcmp((*list)->filename, ".."))
+				&& ft_strcmp((*list)->filename, "..")
+				&& ((*list)->hidden == 0 || args->options & op_a))
 		{
 			content = get_repository_content((*list)->filepath);
 			sort_list(args, &content);
@@ -70,16 +58,14 @@ int	recursive(t_arg *args, t_file **list)
 		else
 			remove_first_elem_list(list);
 	}
-	if (count_directories(list)) {
+	if (count_directories(list))
 		recursive(args, list);
-	}
 	return (0);
 }
 
-int	list_repository(t_arg *args)
+int	list_files(t_arg *args)
 {
 	t_file *tmp;
-	t_file *content;
 
 	if (args->files && args->files->next)
 	{
@@ -91,24 +77,34 @@ int	list_repository(t_arg *args)
 		while (!alphabetical_order(&(args->directories)))
 			;
 	}
+	sort_list(args, &args->files);
 	tmp = args->files;
-	sort_list(args, &tmp);
 	while (tmp)
 	{
 		if (args->options & op_l)
-			print_details(tmp);
+			print_details(args, tmp);
 		else
 			ft_printf("%s\n", tmp->filename);
 		tmp = tmp->next;
 	}
-	tmp = args->directories;
-	sort_list(args, &tmp);
 	if (args->files && args->directories && !(args->options & op_d))
 		ft_printf("\n");
+	return (0);
+}
+
+int	list_directories(t_arg *args)
+{
+	t_file *tmp;
+	t_file *content;
+
+	sort_list(args, &args->directories);
+	tmp = args->directories;
 	while (tmp)
 	{
 		content = get_repository_content(tmp->filename);
-		if (content) {
+		if (content)
+		{
+			args->count_dir = args->count_dir + 1;
 			sort_list(args, &content);
 			print_content(args, &content);
 			if (args->options & op_R)

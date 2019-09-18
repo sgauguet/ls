@@ -41,10 +41,9 @@ int		delete_content(t_file **content, int all)
 	while (*content)
 	{
 		tmp = *content;
-		 *content = (*content)->next;
-		if ((tmp->stats.st_mode & S_IFMT) != S_IFDIR || all) {
+		*content = (*content)->next;
+		if ((tmp->stats.st_mode & S_IFMT) != S_IFDIR || all)
 			free(tmp);
-		}
 		else
 			extract_content(tmp, &list);
 	}
@@ -52,8 +51,8 @@ int		delete_content(t_file **content, int all)
 	return (0);
 }
 
-int		add_content(const char *filename, const char *realpath, const char *filepath,
-		t_file **content, unsigned char type)
+int		add_content(t_dirent *dp, const char *realpath, const char *filepath,
+		t_file **content)
 {
 	t_file *new;
 	t_file *tmp;
@@ -61,10 +60,11 @@ int		add_content(const char *filename, const char *realpath, const char *filepat
 	if (!(new = create_file(filepath)))
 		return (1);
 	ft_bzero(new->filename, NAME_MAX);
-	ft_strncpy(new->filename, filename, ft_strlen(filename));
+	ft_strncpy(new->filename, dp->d_name, ft_strlen(dp->d_name));
 	ft_strncpy(new->filepath, filepath, ft_strlen(filepath));
 	ft_strncpy(new->realpath, realpath, ft_strlen(realpath));
-	new->type = type;
+	new->type = dp->d_type;
+	new->hidden = (ft_strlen(dp->d_name) && dp->d_name[0] == '.') ? 1 : 0;
 	new->next = NULL;
 	tmp = *content;
 	if (!tmp)
@@ -95,7 +95,7 @@ t_file	*get_repository_content(const char *filepath)
 		if (path[ft_strlen(path) - 1] != '/')
 			ft_strcat(path, "/");
 		ft_strcat(path, dp->d_name);
-		add_content(dp->d_name, filepath, path, &content, dp->d_type);
+		add_content(dp, filepath, path, &content);
 	}
 	(void)closedir(dirp);
 	while (!alphabetical_order(&content))

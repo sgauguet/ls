@@ -32,7 +32,7 @@ int		opt_valid(char opt)
 	char	*opt_valid;
 	int		i;
 
-	opt_valid = "lRartufgd";
+	opt_valid = "lRartufGd";
 	i = 0;
 	while (opt_valid[i] != '\0')
 	{
@@ -72,12 +72,12 @@ int		opt_parse(char *argv, t_arg *args)
 		if ((op = opt_valid(argv[i])) == -1)
 		{
 			ft_printf("ls: illegal option -- %c\n", argv[i]);
-			ft_printf("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]\n");
+			ft_printf("usage: ls [-ABCFGHLOPRSTUWabcdef");
+			ft_printf("ghiklmnopqrstuwx1] [file ...]\n");
 			exit(1);
 		}
 		args->options |= ft_pow(op);
 		i++;
 	}
-	//opt_print(options);
 	return (args->options);
 }

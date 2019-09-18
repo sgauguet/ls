@@ -24,41 +24,56 @@ compare . .. . .. . .. . .. ;
 compare -aR auteur ft_ls Makefile test/ src objs/;
 compare -Ra auteur ft_ls Makefile test/ src objs/ src/main.c src/sort.c ;
 compare -a . .. . .. . .. . .. ;
+compare -aR .. ;
 
 # Check -r option
 compare -aRr auteur ft_ls Makefile test/ src objs/;
 compare -Rar auteur ft_ls Makefile test/ src objs/ src/main.c src/sort.c ;
 compare -ar . .. . .. . .. . .. ;
 compare -rR src ;
+compare -rRa src ;
+compare -rrrrRRRRrraaaaaaaa libft ;
 
+#Check -t option
+compare -t libft/;
+compare -aRrt auteur ft_ls Makefile test/ src objs/;
+compare -Rart auteur ft_ls Makefile test/ src objs/ src/main.c src/sort.c ;
+compare -art . .. . .. . .. . .. ;
+compare -rRt src ;
+compare -rRat src ;
+compare -rrrrRRRRrraaaaaaaatttttt libft;
 
-# Check errors
-#compare -R zDHEFQJ;
-#compare -R /var/run;
+#Check -d option
+compare -dR libft/;
+compare -dt libft/;
+compare -adRrt auteur ft_ls Makefile test/ src objs/;
+compare -Radrt auteur ft_ls Makefile test/ src objs/ src/main.c src/sort.c ;
+compare -ardt . .. . .. . .. . .. ;
+compare -rRdt src ;
+compare -rRdat src ;
+compare -rrdrrRRRRrraaaaaaadddddatttttddddt libft;
 
-# Check options
-#compare -l libft;
-#compare -aR;
-#compare -r libft/;
-#compare -t libft;
-#compare -u libft/;
-#compare -g libft/;
-#compare -Rd;
-#compare -d ..;
-#compare -d src ../ft_ls objs/;
+#Check -l option
+compare -l src;
+compare -l src/ objs auteur Makefile;
+compare -laR libft ;
+compare -laR /Users/sgauguet/Library/Containers/com.apple.CalendarAgent/Data/Library/Preferences/ByHost;
 
 # Check multiple options
-#compare -atu libft;
-#compare -r -d -t libft;
-#compare -al libft;
-#compare -alrt libft;
-#compare -ut libft;
-#compare -udla libft;
+compare -at libft;
+compare -r -d -t libft;
+compare -al libft;
+compare -alrt libft;
+compare -t libft;
+compare -dla libft;
 
 #Check invalid option
-#compare -+ ft_ls;
+compare -+ ft_ls;
+compare -8525 src/;
+compare -$$$$$$ -R libft;
 
-#Check big folder
-#compare -R /usr/share/man/man3/;
+# Check errors
+compare -R zDHEFQJ;
+#compare -R /Users/sgauguet/.DocumentRevisions-V100;
 
 exit 0;

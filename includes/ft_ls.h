@@ -20,11 +20,12 @@
 # include <grp.h>
 # include <uuid/uuid.h>
 # include <errno.h>
+# include <time.h>
 
 typedef struct dirent	t_dirent;
 typedef struct stat		t_stat;
 typedef struct group	t_group;
-typedef struct passwd  	t_pwd;
+typedef struct passwd	t_pwd;
 
 typedef enum		e_options {
 	op_l = 1, op_R = 2, op_a = 4, op_r = 8, op_t = 16, op_u = 32,
@@ -36,6 +37,7 @@ typedef struct		s_file {
 	char			filepath[PATH_MAX];
 	char			realpath[PATH_MAX];
 	unsigned char	type;
+	char			hidden;
 	t_stat			stats;
 	struct s_file	*next;
 }					t_file;
@@ -44,8 +46,9 @@ typedef struct		s_arg {
 	t_file	*files;
 	t_file	*directories;
 	int		options;
-	int 	nb;
-	int 	print;
+	int		count_arg;
+	int		count_dir;
+	int		print;
 }					t_arg;
 
 /*
@@ -54,7 +57,8 @@ typedef struct		s_arg {
 
 int					print_hidden_files(t_file *content);
 int					print_colors(t_file *content);
-int					print_details(t_file *content);
+int					print_details(t_arg *args, t_file *content);
+int					print_total(t_arg *args, t_file *start, t_file **content);
 int					print_content(t_arg *args, t_file **content);
 
 /*
@@ -64,7 +68,8 @@ int					print_content(t_arg *args, t_file **content);
 int					remove_first_elem_list(t_file **list);
 int					concat_lists(t_file *sublist, t_file **list);
 int					recursive(t_arg *args, t_file **list);
-int					list_repository(t_arg *args);
+int					list_files(t_arg *args);
+int					list_directories(t_arg *args);
 
 /*
 ** inspect_file.c
@@ -72,8 +77,8 @@ int					list_repository(t_arg *args);
 
 int					extract_content(t_file *elem, t_file **list);
 int					delete_content(t_file **content, int all);
-int					add_content(const char *filename, const char *realpath, const char *path,
-					t_file **content, unsigned char type);
+int					add_content(t_dirent *dp, const char *realpath,
+					const char *filepath, t_file **content);
 t_file				*get_repository_content(const char *filename);
 
 /*
@@ -104,5 +109,12 @@ int					modification_time_order(t_file **list);
 int					reverse_order(t_file **list);
 t_file				*alphabetical_order(t_file **list);
 int					sort_list(t_arg *args, t_file **list);
+
+/*
+** utils.c
+*/
+int					count_directories(t_file **list);
+int					get_access(t_file *content, char access[11]);
+int					format_time(t_file *content, char newtime[50]);
 
 #endif

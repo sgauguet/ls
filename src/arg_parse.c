@@ -59,7 +59,8 @@ t_file	*create_file(const char *filename)
 	t_file *new;
 
 	new = NULL;
-	if (!(new = (t_file *)malloc(sizeof(t_file)))) {
+	if (!(new = (t_file *)malloc(sizeof(t_file))))
+	{
 		return (NULL);
 	}
 	ft_bzero(new->filename, NAME_MAX);
@@ -68,6 +69,7 @@ t_file	*create_file(const char *filename)
 	ft_strncpy(new->filename, filename, ft_strlen(filename));
 	if (lstat(filename, &new->stats) != 0)
 	{
+		ft_printf("ls: %s: %s\n", filename, strerror(errno));
 		free(new);
 		return (NULL);
 	}
@@ -76,10 +78,12 @@ t_file	*create_file(const char *filename)
 
 int		insert_file(t_arg *args, t_file *new)
 {
-	if (((new->stats.st_mode & S_IFMT) == S_IFDIR || (new->stats.st_mode & S_IFMT) == S_IFLNK) && !(args->options & op_d))
+	if (((new->stats.st_mode & S_IFMT) == S_IFDIR
+		|| (new->stats.st_mode & S_IFMT) == S_IFLNK) && !(args->options & op_d))
 	{
 		new->next = args->directories;
 		args->directories = new;
+		args->count_dir = args->count_dir + 1;
 		return (0);
 	}
 	new->next = args->files;
@@ -91,13 +95,11 @@ int		arg_parse(const char *filename, t_arg *args)
 {
 	t_file *new;
 
-	args->nb = args->nb + 1;
+	args->count_arg = args->count_arg + 1;
 	if (filename == NULL || ft_strlen(filename) == 0)
 		return (1);
-	if (!(new = create_file(filename))) {
-		ft_printf("ls: %s: %s\n", filename, strerror(errno));
+	if (!(new = create_file(filename)))
 		return (1);
-	}
 	insert_file(args, new);
 	return (0);
 }
